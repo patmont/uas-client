@@ -2,7 +2,7 @@
 
 # Constants
 CHANNEL=6
-PCAP_FILE="/var/log/tcpdump_mgt_"
+PCAP_FILE="/var/log/tcpdump.pcap"
 MONITOR_SERVICE="monitor_mode.service"
 TCPDUMP_SERVICE="tcpdump_mgt.service"
 
@@ -59,7 +59,7 @@ After=$MONITOR_SERVICE
 Requires=$MONITOR_SERVICE
 
 [Service]
-ExecStart=/usr/sbin/tcpdump -i $mon_if -W 10 -C 100 -w $PCAP_FILE 'type mgt'
+ExecStart=/usr/bin/tcpdump -i $mon_if -W 2 -C 100 -w $PCAP_FILE 'type mgt' -Z root
 Restart=always
 
 [Install]
@@ -70,8 +70,8 @@ EOL
 create_config_file() {
 cat <<EOL > ./scripts/config.yaml
 vars:
-    iface: "$mon_if"
-    channel: "$CHANNEL"
+    iface: "${wlan}mon"
+    channel: $CHANNEL
     pcap_file: "$PCAP_FILE"
 EOL
 }
@@ -105,7 +105,6 @@ main() {
     select wlan in $interfaces; do
         if [[ -n $wlan ]]; then
             echo "Selected interface: $wlan"
-            create_config_file
             break
         else
             echo "Invalid selection. Try again."
@@ -114,6 +113,7 @@ main() {
 
     # Create and manage services
     create_service_files "$wlan"
+    create_config_file "$wlan"
     reload_and_restart_services
 }
 

@@ -1,0 +1,3 @@
+[submodule "libs/opendroneid"]
+	path = libs/opendroneid
+	url = https://github.com/opendroneid/opendroneid-core-c.git

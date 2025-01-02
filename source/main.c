@@ -1,8 +1,8 @@
 
 #include <stdio.h>
-#include "capture.c"
-#include "database.c"
-#include "parser.c"
+#include "capture.h"
+#include "database.h"
+#include "parser.h"
 
 void main() {
     init_db();

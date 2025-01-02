@@ -1,3 +1,5 @@
-/build
+build/
+.venv/
+.vscode/
 *.sqlite
 *config.yaml
